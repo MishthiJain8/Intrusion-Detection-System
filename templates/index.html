@@ -2,107 +2,308 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intrusion Detection System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: #f4f7f9;
-            margin: 0;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            color: #333;
+            color: #e2e8f0;
         }
+
         .container {
-            max-width: 700px;
-            margin: auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 750px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
         }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .shield-icon {
+            font-size: 2.4rem;
+            filter: drop-shadow(0 0 10px #6366f1);
+        }
+
         h1 {
-            color: #2c3e50;
-            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #64748b;
+            flex-shrink: 0;
+            transition: background 0.4s;
+        }
+
+        .status-dot.active {
+            background: #22c55e;
+            box-shadow: 0 0 8px #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .countdown {
+            margin-left: auto;
+            font-weight: 600;
+            color: #818cf8;
+        }
+
         button {
-            background-color: #3498db;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .alert {
-            background-color: #fef3c7;
-            border-left: 6px solid #facc15;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #888;
-            text-align: center;
-        }
-        .countdown {
+            padding: 14px 34px;
+            font-size: 1rem;
             font-weight: 600;
-            margin-top: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(99, 102, 241, 0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .alerts-section {
+            margin-top: 30px;
+        }
+
+        .alerts-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        #alerts-container {
+            min-height: 60px;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(250, 204, 21, 0.08);
+            border-left: 4px solid #facc15;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-item.safe {
+            background: rgba(34, 197, 94, 0.08);
+            border-left-color: #22c55e;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+        .empty-state {
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+            padding: 20px 0;
+        }
+
+        .footer {
+            margin-top: 32px;
+            font-size: 0.8rem;
+            color: #475569;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Network Intrusion Detection</h1>
-
-        <div id="info-text">
-            <p>Click the button below to begin monitoring suspicious network activity. This process lasts <strong>30 seconds</strong>.</p>
-            <p class="countdown">Time left: <span id="timer">30</span> seconds</p>
-            <p><em>Note: On macOS, alerts may not appear due to limited system access or low traffic. Try running on a networked Linux machine for full results.</em></p>
+        <div class="header">
+            <span class="shield-icon">🛡️</span>
+            <h1>Network Intrusion Detection</h1>
         </div>
 
-        <button onclick="startSniffing()">Start Sniffing</button>
+        <p class="subtitle">
+            Monitor your network in real-time for suspicious activity such as port scans.
+            Click <strong>Start Monitoring</strong> to begin a 30-second capture session.
+        </p>
 
-        <div id="alerts">
-            {% for alert in alerts %}
-            <div class="alert">{{ alert }}</div>
-            {% endfor %}
+        <div class="status-bar">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="status-text">Idle — ready to monitor</span>
+            <span class="countdown" id="timer-display"></span>
         </div>
 
-        <div class="footer">
-            Developed with Flask & Scapy • Secure your network ⚡
+        <button id="start-btn" onclick="startSniffing()">
+            <span>▶</span> Start Monitoring
+        </button>
+
+        <div class="alerts-section">
+            <div class="alerts-label">Detection Log</div>
+            <div id="alerts-container">
+                <div class="empty-state" id="empty-state">No alerts yet. Start monitoring to detect threats.</div>
+                {% for alert in alerts %}
+                <div class="alert-item {% if 'No ' in alert %}safe{% endif %}">
+                    <span class="alert-icon">{% if 'No ' in alert %}✅{% else %}⚠️{% endif %}</span>
+                    <span>{{ alert }}</span>
+                </div>
+                {% endfor %}
+            </div>
         </div>
+
+        <div class="footer">Built with Flask &amp; Scapy &nbsp;•&nbsp; Run as Administrator for packet capture ⚡</div>
     </div>
 
     <script>
-        let timerInterval;
+        let pollInterval = null;
+        let countdownInterval = null;
+        let renderedAlerts = new Set();
+
+        // Pre-populate renderedAlerts with any server-rendered alerts
+        document.querySelectorAll('#alerts-container .alert-item span:last-child').forEach(el => {
+            renderedAlerts.add(el.textContent.trim());
+        });
 
         function startSniffing() {
+            const btn = document.getElementById('start-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span> Starting…';
+
             fetch('/start_sniffing', { method: 'POST' })
-                .then(response => response.json())
+                .then(r => r.json())
                 .then(data => {
-                    alert(data.message);
+                    setStatus(true);
+                    btn.innerHTML = '<span>🔍</span> Monitoring…';
                     startCountdown(30);
+                    startPolling();
+                })
+                .catch(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>▶</span> Start Monitoring';
+                    alert('Failed to start sniffing. Make sure the server is running as Administrator.');
                 });
         }
 
-        function startCountdown(duration) {
-            let timer = duration;
-            const timerDisplay = document.getElementById('timer');
+        function setStatus(active) {
+            document.getElementById('status-dot').classList.toggle('active', active);
+            document.getElementById('status-text').textContent = active
+                ? 'Monitoring — capturing TCP packets…'
+                : 'Session complete';
+        }
 
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timerDisplay.textContent = timer;
-                if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    timerDisplay.textContent = "Done!";
+        function startCountdown(seconds) {
+            const display = document.getElementById('timer-display');
+            let remaining = seconds;
+            display.textContent = `${remaining}s remaining`;
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                remaining--;
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    display.textContent = 'Done';
+                    setStatus(false);
+                    stopPolling();
+                    fetchAlerts(); // final poll
+                    document.getElementById('start-btn').disabled = false;
+                    document.getElementById('start-btn').innerHTML = '<span>▶</span> Start Monitoring';
+                } else {
+                    display.textContent = `${remaining}s remaining`;
                 }
             }, 1000);
+        }
+
+        function startPolling() {
+            clearInterval(pollInterval);
+            pollInterval = setInterval(fetchAlerts, 2000);
+        }
+
+        function stopPolling() {
+            clearInterval(pollInterval);
+        }
+
+        function fetchAlerts() {
+            fetch('/alerts')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('alerts-container');
+                    const emptyState = document.getElementById('empty-state');
+
+                    data.alerts.forEach(alert => {
+                        if (!renderedAlerts.has(alert)) {
+                            renderedAlerts.add(alert);
+                            if (emptyState) emptyState.remove();
+
+                            const div = document.createElement('div');
+                            const isSafe = alert.startsWith('No ');
+                            div.className = 'alert-item' + (isSafe ? ' safe' : '');
+                            div.innerHTML = `<span class="alert-icon">${isSafe ? '✅' : '⚠️'}</span><span>${alert}</span>`;
+                            container.appendChild(div);
+                        }
+                    });
+                });
         }
     </script>
 </body>

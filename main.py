@@ -28,7 +28,7 @@ def main():
     # sniff(filter="tcp", prn=detect_port_scan, store=0)
 
     # Use this line for macOS Wi-Fi interface sniffing:
-    sniff(filter="tcp", prn=detect_port_scan, store=0, iface="en0")
+    sniff(filter="tcp", prn=detect_port_scan, store=0)
 
 if __name__ == "__main__":
     main()
