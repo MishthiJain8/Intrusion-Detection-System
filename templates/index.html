@@ -171,11 +171,39 @@
             padding: 20px 0;
         }
 
-        .footer {
-            margin-top: 32px;
-            font-size: 0.8rem;
-            color: #475569;
-            text-align: center;
+        .report-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .report-summary {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .report-details {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .report-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .report-metric:last-child {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -211,6 +239,14 @@
                     <span>{{ alert }}</span>
                 </div>
                 {% endfor %}
+            </div>
+        </div>
+
+        <div class="report-section" id="report-section" style="display: none;">
+            <div class="alerts-label">Incident Response Report</div>
+            <div id="report-container">
+                <div class="report-summary" id="report-summary"></div>
+                <div class="report-details" id="report-details"></div>
             </div>
         </div>
 
@@ -267,6 +303,7 @@
                     setStatus(false);
                     stopPolling();
                     fetchAlerts(); // final poll
+                    fetchReport(); // fetch incident report
                     document.getElementById('start-btn').disabled = false;
                     document.getElementById('start-btn').innerHTML = '<span>▶</span> Start Monitoring';
                 } else {
@@ -284,26 +321,51 @@
             clearInterval(pollInterval);
         }
 
-        function fetchAlerts() {
-            fetch('/alerts')
+        function fetchReport() {
+            fetch('/report')
                 .then(r => r.json())
                 .then(data => {
-                    const container = document.getElementById('alerts-container');
-                    const emptyState = document.getElementById('empty-state');
-
-                    data.alerts.forEach(alert => {
-                        if (!renderedAlerts.has(alert)) {
-                            renderedAlerts.add(alert);
-                            if (emptyState) emptyState.remove();
-
-                            const div = document.createElement('div');
-                            const isSafe = alert.startsWith('No ');
-                            div.className = 'alert-item' + (isSafe ? ' safe' : '');
-                            div.innerHTML = `<span class="alert-icon">${isSafe ? '✅' : '⚠️'}</span><span>${alert}</span>`;
-                            container.appendChild(div);
-                        }
+                    if (data.error) return;
+                    
+                    const reportSection = document.getElementById('report-section');
+                    const summaryDiv = document.getElementById('report-summary');
+                    const detailsDiv = document.getElementById('report-details');
+                    
+                    const summary = data.session_summary;
+                    summaryDiv.innerHTML = `
+                        <div class="report-metric"><strong>Session Duration:</strong> ${summary.duration_seconds}s</div>
+                        <div class="report-metric"><strong>Total Packets:</strong> ${summary.total_packets_captured}</div>
+                        <div class="report-metric"><strong>Unique IPs:</strong> ${summary.unique_source_ips}</div>
+                        <div class="report-metric"><strong>Port Scans Detected:</strong> ${summary.port_scans_detected}</div>
+                        <div class="report-metric"><strong>Start Time:</strong> ${summary.start_time}</div>
+                        <div class="report-metric"><strong>End Time:</strong> ${summary.end_time}</div>
+                    `;
+                    
+                    let detailsHtml = '<h4>Incidents:</h4>';
+                    if (data.incidents.length > 0) {
+                        data.incidents.forEach(incident => {
+                            detailsHtml += `
+                                <div style="margin-bottom: 12px; padding: 8px; background: rgba(250, 204, 21, 0.1); border-radius: 6px;">
+                                    <strong>Port Scan from ${incident.source_ip}</strong><br>
+                                    Time: ${new Date(incident.timestamp * 1000).toLocaleString()}<br>
+                                    Ports: ${incident.ports_accessed.join(', ')} (${incident.total_ports} total)
+                                </div>
+                            `;
+                        });
+                    } else {
+                        detailsHtml += '<p>No incidents detected.</p>';
+                    }
+                    
+                    detailsHtml += '<h4>Recommendations:</h4><ul>';
+                    data.recommendations.forEach(rec => {
+                        detailsHtml += `<li>${rec}</li>`;
                     });
-                });
+                    detailsHtml += '</ul>';
+                    
+                    detailsDiv.innerHTML = detailsHtml;
+                    reportSection.style.display = 'block';
+                })
+                .catch(err => console.log('Report not available yet'));
         }
     </script>
 </body>
