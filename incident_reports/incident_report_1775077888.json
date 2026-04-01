@@ -1,0 +1,137 @@
+{
+  "session_summary": {
+    "start_time": "2026-04-02 02:41:28",
+    "end_time": "2026-04-02 02:41:28",
+    "duration_seconds": 0.0,
+    "total_packets_captured": 12,
+    "unique_source_ips": 2,
+    "total_incidents": 2,
+    "overall_risk_score": 84,
+    "severity": "Critical"
+  },
+  "threats_detected": {
+    "port_scans": [
+      {
+        "timestamp": 1775077888.378855,
+        "source_ip": "192.168.0.50",
+        "ports_accessed": [
+          22,
+          80,
+          443,
+          3389,
+          5900,
+          8080
+        ],
+        "total_ports": 6,
+        "risk_score": 42
+      },
+      {
+        "timestamp": 1775077888.378855,
+        "source_ip": "192.168.0.51",
+        "ports_accessed": [
+          22,
+          80,
+          443,
+          3389,
+          5900,
+          8080
+        ],
+        "total_ports": 6,
+        "risk_score": 42
+      }
+    ],
+    "high_packet_rate": []
+  },
+  "recommendations": [
+    "\ud83d\udd34 Port scan activity detected - implement rate limiting and IP-based filtering",
+    "\ud83d\udd34 Consider deploying IDS/IPS signatures for reconnaissance patterns",
+    "\ud83d\udcca Severity Level: Critical",
+    "\ud83d\udce7 Archive this report for compliance and audit trails"
+  ],
+  "detailed_logs_sample": [
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.50",
+      "dest_port": 22,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.50",
+      "dest_port": 80,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.50",
+      "dest_port": 443,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.50",
+      "dest_port": 8080,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.50",
+      "dest_port": 3389,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.50",
+      "dest_port": 5900,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.51",
+      "dest_port": 22,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.51",
+      "dest_port": 80,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.51",
+      "dest_port": 443,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.51",
+      "dest_port": 8080,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.51",
+      "dest_port": 3389,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    },
+    {
+      "timestamp": 1775077888.378855,
+      "source_ip": "192.168.0.51",
+      "dest_port": 5900,
+      "protocol": "TCP (simulated)",
+      "flags": "SYN (simulated)"
+    }
+  ]
+}

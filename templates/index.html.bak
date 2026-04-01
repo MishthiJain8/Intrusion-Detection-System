@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Intrusion Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0e27, #1a1a4d, #0f0c29);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e2e8f0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .shield-icon {
+            font-size: 2.4rem;
+            filter: drop-shadow(0 0 10px #6366f1);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #64748b;
+            flex-shrink: 0;
+            transition: background 0.4s;
+        }
+
+        .status-dot.active {
+            background: #22c55e;
+            box-shadow: 0 0 8px #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .countdown {
+            margin-left: auto;
+            font-weight: 600;
+            color: #818cf8;
+        }
+
+        button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 14px 34px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(99, 102, 241, 0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .alerts-section {
+            margin-top: 30px;
+        }
+
+        .alerts-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        #alerts-container {
+            min-height: 60px;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(250, 204, 21, 0.08);
+            border-left: 4px solid #facc15;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-item.safe {
+            background: rgba(34, 197, 94, 0.08);
+            border-left-color: #22c55e;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-12px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+        .empty-state {
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+            padding: 20px 0;
+        }
+
+        .report-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .report-summary {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .report-details {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 0.85rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .report-metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .report-metric:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="shield-icon">🛡️</span>
+            <h1>Network Intrusion Detection</h1>
+        </div>
+
+        <p class="subtitle">
+            Monitor your network in real-time for suspicious activity such as port scans.
+            Click <strong>Start Monitoring</strong> to begin a 30-second capture session. No admin/root rights are required; simulation fallback is used when packet capture is unavailable.
+        </p>
+
+        <div class="status-bar">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="status-text">Idle — ready to monitor</span>
+            <span class="countdown" id="timer-display"></span>
+        </div>
+
+        <!-- Start Monitoring button removed per user request -->
+
+        <div class="alerts-section">
+            <div class="alerts-label">Detection Log</div>
+            <div id="alerts-container">
+                <div class="empty-state" id="empty-state">No alerts yet. Start monitoring to detect threats.</div>
+                {% for alert in alerts %}
+                <div class="alert-item {% if 'No ' in alert %}safe{% endif %}">
+                    <span class="alert-icon">{% if 'No ' in alert %}✅{% else %}⚠️{% endif %}</span>
+                    <span>{{ alert }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="report-section" id="report-section" style="display: none;">
+            <div class="alerts-label">Incident Response Report</div>
+            <div id="report-container">
+                <div class="report-summary" id="report-summary"></div>
+                <div class="report-details" id="report-details"></div>
+            </div>
+        </div>
+
+        <div class="footer">Built with Flask &amp; Scapy &nbsp;•&nbsp; No admin/root required; simulation fallback active ⚡</div>
+    </div>
+
+    <script>
+        let pollInterval = null;
+        let countdownInterval = null;
+        let renderedAlerts = new Set();
+
+        // Pre-populate renderedAlerts with any server-rendered alerts
+        document.querySelectorAll('#alerts-container .alert-item span:last-child').forEach(el => {
+            renderedAlerts.add(el.textContent.trim());
+        });
+
+        // startSniffing() removed because manual trigger button was removed.
+        // Monitoring now must be started by hitting /start_sniffing API directly or by custom code.
+
+        function setStatus(active) {
+            document.getElementById('status-dot').classList.toggle('active', active);
+            document.getElementById('status-text').textContent = active
+                ? 'Monitoring — capturing TCP packets…'
+                : 'Session complete';
+        }
+
+        function startCountdown(seconds) {
+            const display = document.getElementById('timer-display');
+            let remaining = seconds;
+            display.textContent = `${remaining}s remaining`;
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                remaining--;
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    display.textContent = 'Done';
+                    setStatus(false);
+                    stopPolling();
+                    fetchAlerts(); // final poll
+                    fetchReport(); // fetch incident report
+                    document.getElementById('start-btn').disabled = false;
+                    document.getElementById('start-btn').innerHTML = '<span>▶</span> Start Monitoring';
+                } else {
+                    display.textContent = `${remaining}s remaining`;
+                }
+            }, 1000);
+        }
+
+        function startPolling() {
+            clearInterval(pollInterval);
+            pollInterval = setInterval(fetchAlerts, 2000);
+        }
+
+        function stopPolling() {
+            clearInterval(pollInterval);
+        }
+
+        function fetchReport() {
+            fetch('/report')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) return;
+                    
+                    const reportSection = document.getElementById('report-section');
+                    const summaryDiv = document.getElementById('report-summary');
+                    const detailsDiv = document.getElementById('report-details');
+                    
+                    const summary = data.session_summary;
+                    summaryDiv.innerHTML = `
+                        <div class="report-metric"><strong>Session Duration:</strong> ${summary.duration_seconds}s</div>
+                        <div class="report-metric"><strong>Total Packets:</strong> ${summary.total_packets_captured}</div>
+                        <div class="report-metric"><strong>Unique IPs:</strong> ${summary.unique_source_ips}</div>
+                        <div class="report-metric"><strong>Port Scans Detected:</strong> ${summary.port_scans_detected}</div>
+                        <div class="report-metric"><strong>Start Time:</strong> ${summary.start_time}</div>
+                        <div class="report-metric"><strong>End Time:</strong> ${summary.end_time}</div>
+                    `;
+                    
+                    let detailsHtml = '<h4>Incidents:</h4>';
+                    if (data.incidents.length > 0) {
+                        data.incidents.forEach(incident => {
+                            detailsHtml += `
+                                <div style="margin-bottom: 12px; padding: 8px; background: rgba(250, 204, 21, 0.1); border-radius: 6px;">
+                                    <strong>Port Scan from ${incident.source_ip}</strong><br>
+                                    Time: ${new Date(incident.timestamp * 1000).toLocaleString()}<br>
+                                    Ports: ${incident.ports_accessed.join(', ')} (${incident.total_ports} total)
+                                </div>
+                            `;
+                        });
+                    } else {
+                        detailsHtml += '<p>No incidents detected.</p>';
+                    }
+                    
+                    detailsHtml += '<h4>Recommendations:</h4><ul>';
+                    data.recommendations.forEach(rec => {
+                        detailsHtml += `<li>${rec}</li>`;
+                    });
+                    detailsHtml += '</ul>';
+                    
+                    detailsDiv.innerHTML = detailsHtml;
+                    reportSection.style.display = 'block';
+                })
+                .catch(err => console.log('Report not available yet'));
+        }
+    </script>
+</body>
+</html>

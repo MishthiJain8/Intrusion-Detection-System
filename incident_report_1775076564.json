@@ -1,0 +1,38 @@
+{
+  "session_summary": {
+    "start_time": "2026-04-02 02:19:24",
+    "end_time": "2026-04-02 02:19:54",
+    "duration_seconds": 30.01,
+    "total_packets_captured": 3201,
+    "unique_source_ips": 12,
+    "port_scans_detected": 2
+  },
+  "incidents": [
+    {
+      "timestamp": 1775076566.5019789,
+      "source_ip": "34.117.41.85",
+      "ports_accessed": [
+        51629,
+        51649,
+        51650
+      ],
+      "total_ports": 3
+    },
+    {
+      "timestamp": 1775076578.974708,
+      "source_ip": "104.46.162.225",
+      "ports_accessed": [
+        51770,
+        51775,
+        51777
+      ],
+      "total_ports": 3
+    }
+  ],
+  "recommendations": [
+    "Block suspicious IP addresses at the firewall level",
+    "Monitor the affected systems for unauthorized access",
+    "Review firewall logs for additional suspicious activity",
+    "Consider implementing rate limiting on network ports"
+  ]
+}

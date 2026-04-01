@@ -3,313 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intrusion Detection System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Advanced Intrusion Detection System (IDS)</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a4d 50%, #0f0c29 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 30px 20px;
             color: #e2e8f0;
         }
 
-        .container {
-            max-width: 750px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-        }
-
         .header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 30px;
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        .shield-icon {
-            font-size: 2.4rem;
-            filter: drop-shadow(0 0 10px #6366f1);
-        }
-
-        h1 {
-            font-size: 1.8rem;
+        .header h1 {
+            font-size: 3rem;
             font-weight: 700;
-            background: linear-gradient(90deg, #818cf8, #c084fc);
+            background: linear-gradient(90deg, #00ff88 0%, #00ccff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
         }
 
-        .subtitle {
+        .header p {
             color: #94a3b8;
-            font-size: 0.95rem;
-            margin-bottom: 28px;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
-        .status-bar {
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 255, 136, 0.6);
+            box-shadow: 0 30px 60px rgba(0, 255, 136, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .card h2 {
+            color: #00ff88;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 10px;
-            padding: 12px 18px;
-            margin-bottom: 24px;
-            font-size: 0.9rem;
+        }
+
+        .card-title-icon {
+            font-size: 1.8rem;
+        }
+
+        .status-container {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: #64748b;
-            flex-shrink: 0;
-            transition: background 0.4s;
+            box-shadow: 0 0 10px rgba(100, 116, 139, 0.5);
+            transition: all 0.3s ease;
         }
 
-        .status-dot.active {
-            background: #22c55e;
-            box-shadow: 0 0 8px #22c55e;
-            animation: pulse 1.5s infinite;
+        .status-dot.monitoring {
+            background: #00ff88;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
         }
 
-        .countdown {
-            margin-left: auto;
-            font-weight: 600;
-            color: #818cf8;
-        }
-
-        button {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            border: none;
-            padding: 14px 34px;
+        .status-text {
             font-size: 1rem;
             font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .timer {
+            font-size: 1.3rem;
+            color: #00ff88;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid rgba(0, 255, 136, 0.4);
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.15s, box-shadow 0.15s;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
 
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(99, 102, 241, 0.6);
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88, #00ccff);
+            color: #0a0e27;
+            border: none;
         }
 
-        button:disabled {
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00ff88;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: #00ff88;
+        }
+
+        .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
-        .alerts-section {
-            margin-top: 30px;
-        }
-
-        .alerts-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #64748b;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        #alerts-container {
-            min-height: 60px;
+        .alerts-list {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 15px;
         }
 
         .alert-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            background: rgba(250, 204, 21, 0.08);
-            border-left: 4px solid #facc15;
-            padding: 14px 16px;
-            margin-bottom: 10px;
+            background: rgba(255, 193, 7, 0.08);
+            border-left: 4px solid #ffb300;
+            padding: 14px;
+            margin-bottom: 12px;
             border-radius: 8px;
-            font-size: 0.92rem;
+            display: flex;
+            gap: 12px;
             animation: slideIn 0.3s ease;
         }
 
-        .alert-item.safe {
+        .alert-item.critical {
+            background: rgba(255, 59, 48, 0.08);
+            border-left-color: #ff3b30;
+        }
+
+        .alert-item.warning {
+            background: rgba(255, 149, 0, 0.08);
+            border-left-color: #ff7500;
+        }
+
+        .alert-item.success {
             background: rgba(34, 197, 94, 0.08);
             border-left-color: #22c55e;
         }
 
+        .alert-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .alert-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-12px); }
-            to   { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        .alert-icon { font-size: 1.1rem; flex-shrink: 0; }
+        .report-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
 
-        .empty-state {
+        .metric-box {
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 10px;
+            padding: 15px;
             text-align: center;
-            color: #475569;
-            font-size: 0.9rem;
-            padding: 20px 0;
         }
 
-        .report-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .report-summary {
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-        }
-
-        .report-details {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 16px;
+        .metric-label {
+            color: #94a3b8;
             font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            color: #00ff88;
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .severity-critical { color: #ff3b30; }
+        .severity-high { color: #ff7500; }
+        .severity-medium { color: #ffb300; }
+        .severity-low { color: #22c55e; }
+
+        .recommendations {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
             max-height: 300px;
             overflow-y: auto;
         }
 
-        .report-metric {
-            display: flex;
-            justify-content: space-between;
+        .recommendation-item {
+            padding: 10px;
             margin-bottom: 8px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 3px solid rgba(0, 255, 136, 0.3);
+            padding-left: 12px;
         }
 
-        .report-metric:last-child {
-            margin-bottom: 0;
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #64748b;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>🛡️ ADVANCED IDS</h1>
+        <p>Real-Time Network Intrusion Detection & Incident Response</p>
+        <p style="font-size: 0.9rem; color: #475569;">Multi-Layer Detection • Risk Scoring • Persistent Reports</p>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <span class="shield-icon">🛡️</span>
-            <h1>Network Intrusion Detection</h1>
-        </div>
-
-        <p class="subtitle">
-            Monitor your network in real-time for suspicious activity such as port scans.
-            Click <strong>Start Monitoring</strong> to begin a 30-second capture session.
-        </p>
-
-        <div class="status-bar">
-            <span class="status-dot" id="status-dot"></span>
-            <span id="status-text">Idle — ready to monitor</span>
-            <span class="countdown" id="timer-display"></span>
-        </div>
-
-        <button id="start-btn" onclick="startSniffing()">
-            <span>▶</span> Start Monitoring
-        </button>
-
-        <div class="alerts-section">
-            <div class="alerts-label">Detection Log</div>
-            <div id="alerts-container">
-                <div class="empty-state" id="empty-state">No alerts yet. Start monitoring to detect threats.</div>
-                {% for alert in alerts %}
-                <div class="alert-item {% if 'No ' in alert %}safe{% endif %}">
-                    <span class="alert-icon">{% if 'No ' in alert %}✅{% else %}⚠️{% endif %}</span>
-                    <span>{{ alert }}</span>
+        <!-- Monitoring Control Card -->
+        <div class="card">
+            <h2><span class="card-title-icon">⚙️</span> Monitoring Control</h2>
+            
+            <div class="status-container">
+                <div class="status-indicator">
+                    <div class="status-dot" id="status-dot"></div>
+                    <div class="status-text" id="status-text">Idle — Ready to Monitor</div>
                 </div>
-                {% endfor %}
+                <div class="timer" id="timer-display" style="display:none;"></div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="start-btn" onclick="startMonitoring()">
+                    ▶️ START MONITORING
+                </button>
+                <button class="btn btn-secondary" onclick="refreshAlertsManual()">
+                    🔄 REFRESH
+                </button>
             </div>
         </div>
 
-        <div class="report-section" id="report-section" style="display: none;">
-            <div class="alerts-label">Incident Response Report</div>
+        <!-- Real-Time Alerts Card -->
+        <div class="card">
+            <h2><span class="card-title-icon">🚨</span> Real-Time Alerts</h2>
+            
+            <div id="alerts-container" class="alerts-list">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <p>No alerts yet. Start monitoring to detect threats.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Report Card (Full Width) -->
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2><span class="card-title-icon">📊</span> Incident Response Report</h2>
+            
             <div id="report-container">
-                <div class="report-summary" id="report-summary"></div>
-                <div class="report-details" id="report-details"></div>
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <p>No report available yet. Complete a monitoring session to generate a report.</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="footer">Built with Flask &amp; Scapy &nbsp;•&nbsp; Run as Administrator for packet capture ⚡</div>
+    <div class="footer">
+        <p>🔐 Advanced Intrusion Detection System | Real-Time Network Monitoring | No Admin/Root Required</p>
     </div>
 
     <script>
         let pollInterval = null;
         let countdownInterval = null;
-        let renderedAlerts = new Set();
+        let isMonitoring = false;
 
-        // Pre-populate renderedAlerts with any server-rendered alerts
-        document.querySelectorAll('#alerts-container .alert-item span:last-child').forEach(el => {
-            renderedAlerts.add(el.textContent.trim());
-        });
-
-        function startSniffing() {
+        function startMonitoring() {
             const btn = document.getElementById('start-btn');
             btn.disabled = true;
-            btn.innerHTML = '<span>⏳</span> Starting…';
+            btn.textContent = '⏳ STARTING...';
 
             fetch('/start_sniffing', { method: 'POST' })
-                .then(r => r.json())
+                .then(r => {
+                    if (!r.ok) throw new Error('Server error');
+                    return r.json();
+                })
                 .then(data => {
-                    setStatus(true);
-                    btn.innerHTML = '<span>🔍</span> Monitoring…';
+                    isMonitoring = true;
+                    clearContainer('alerts-container');
+                    updateStatusMonitoring(true);
                     startCountdown(30);
                     startPolling();
                 })
-                .catch(() => {
+                .catch(err => {
+                    console.error('Error:', err);
                     btn.disabled = false;
-                    btn.innerHTML = '<span>▶</span> Start Monitoring';
-                    alert('Failed to start sniffing. Make sure the server is running as Administrator.');
+                    btn.textContent = '▶️ START MONITORING';
+                    alert('❌ Failed to start monitoring. Check server connection.');
                 });
         }
 
-        function setStatus(active) {
-            document.getElementById('status-dot').classList.toggle('active', active);
-            document.getElementById('status-text').textContent = active
-                ? 'Monitoring — capturing TCP packets…'
-                : 'Session complete';
+        function updateStatusMonitoring(active) {
+            const dot = document.getElementById('status-dot');
+            const text = document.getElementById('status-text');
+            const timer = document.getElementById('timer-display');
+
+            if (active) {
+                dot.classList.add('monitoring');
+                text.textContent = '🔴 LIVE MONITORING ACTIVE';
+                timer.style.display = 'block';
+            } else {
+                dot.classList.remove('monitoring');
+                text.textContent = '✅ Monitoring Complete';
+                timer.style.display = 'none';
+            }
         }
 
         function startCountdown(seconds) {
             const display = document.getElementById('timer-display');
             let remaining = seconds;
-            display.textContent = `${remaining}s remaining`;
-            clearInterval(countdownInterval);
-            countdownInterval = setInterval(() => {
-                remaining--;
+            
+            function updateTimer() {
+                display.textContent = `⏱️ ${remaining}s Remaining`;
                 if (remaining <= 0) {
                     clearInterval(countdownInterval);
-                    display.textContent = 'Done';
-                    setStatus(false);
+                    isMonitoring = false;
+                    updateStatusMonitoring(false);
                     stopPolling();
-                    fetchAlerts(); // final poll
-                    fetchReport(); // fetch incident report
+                    fetchAlerts();
+                    fetchReport();
                     document.getElementById('start-btn').disabled = false;
-                    document.getElementById('start-btn').innerHTML = '<span>▶</span> Start Monitoring';
-                } else {
-                    display.textContent = `${remaining}s remaining`;
+                    document.getElementById('start-btn').textContent = '▶️ START MONITORING';
                 }
-            }, 1000);
+                remaining--;
+            }
+
+            updateTimer();
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(updateTimer, 1000);
         }
 
         function startPolling() {
@@ -321,52 +434,120 @@
             clearInterval(pollInterval);
         }
 
+        function clearContainer(id) {
+            const container = document.getElementById(id);
+            container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔍</div><p>Loading...</p></div>';
+        }
+
+        function fetchAlerts() {
+            fetch('/alerts')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('alerts-container');
+                    if (!data.alerts || data.alerts.length === 0) {
+                        container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p>No alerts yet.</p></div>';
+                        return;
+                    }
+
+                    let html = '';
+                    data.alerts.forEach(alert => {
+                        let severityClass = 'warning';
+                        let icon = '⚠️';
+
+                        if (alert.includes('🔍')) {
+                            severityClass = 'critical';
+                            icon = '🔴';
+                        } else if (alert.includes('⚡')) {
+                            severityClass = 'warning';
+                            icon = '🟠';
+                        } else if (alert.includes('💾') || alert.includes('📋')) {
+                            severityClass = 'success';
+                            icon = '🟢';
+                        }
+
+                        html += `
+                            <div class="alert-item ${severityClass}">
+                                <div class="alert-icon">${icon}</div>
+                                <div class="alert-text">${alert}</div>
+                            </div>
+                        `;
+                    });
+
+                    container.innerHTML = html;
+                })
+                .catch(err => console.log('Alert fetch error:', err));
+        }
+
         function fetchReport() {
             fetch('/report')
                 .then(r => r.json())
                 .then(data => {
                     if (data.error) return;
-                    
-                    const reportSection = document.getElementById('report-section');
-                    const summaryDiv = document.getElementById('report-summary');
-                    const detailsDiv = document.getElementById('report-details');
-                    
+
+                    const container = document.getElementById('report-container');
                     const summary = data.session_summary;
-                    summaryDiv.innerHTML = `
-                        <div class="report-metric"><strong>Session Duration:</strong> ${summary.duration_seconds}s</div>
-                        <div class="report-metric"><strong>Total Packets:</strong> ${summary.total_packets_captured}</div>
-                        <div class="report-metric"><strong>Unique IPs:</strong> ${summary.unique_source_ips}</div>
-                        <div class="report-metric"><strong>Port Scans Detected:</strong> ${summary.port_scans_detected}</div>
-                        <div class="report-metric"><strong>Start Time:</strong> ${summary.start_time}</div>
-                        <div class="report-metric"><strong>End Time:</strong> ${summary.end_time}</div>
+                    const severity = summary.severity || 'Unknown';
+                    const severityClass = `severity-${severity.toLowerCase()}`;
+
+                    let html = `
+                        <div class="report-metrics">
+                            <div class="metric-box">
+                                <div class="metric-label">Duration</div>
+                                <div class="metric-value">${summary.duration_seconds}s</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-label">Total Packets</div>
+                                <div class="metric-value">${summary.total_packets_captured}</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-label">Unique IPs</div>
+                                <div class="metric-value">${summary.unique_source_ips}</div>
+                            </div>
+                            <div class="metric-box">
+                                <div class="metric-label">Incidents</div>
+                                <div class="metric-value">${summary.total_incidents || 0}</div>
+                            </div>
+                        </div>
+
+                        <div style="background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center;">
+                            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 8px;">SEVERITY LEVEL</div>
+                            <div class="${severityClass}" style="font-size: 1.6rem; font-weight: 700;">${severity}</div>
+                        </div>
                     `;
-                    
-                    let detailsHtml = '<h4>Incidents:</h4>';
-                    if (data.incidents.length > 0) {
-                        data.incidents.forEach(incident => {
-                            detailsHtml += `
-                                <div style="margin-bottom: 12px; padding: 8px; background: rgba(250, 204, 21, 0.1); border-radius: 6px;">
-                                    <strong>Port Scan from ${incident.source_ip}</strong><br>
-                                    Time: ${new Date(incident.timestamp * 1000).toLocaleString()}<br>
-                                    Ports: ${incident.ports_accessed.join(', ')} (${incident.total_ports} total)
+
+                    if (data.threats_detected.port_scans.length > 0) {
+                        html += '<h3 style="margin-top: 20px; margin-bottom: 10px; color: #ff3b30;">🔴 Port Scans Detected</h3>';
+                        data.threats_detected.port_scans.forEach(threat => {
+                            html += `
+                                <div style="background: rgba(255, 59, 48, 0.05); border-left: 3px solid #ff3b30; padding: 12px; margin-bottom: 10px; border-radius: 6px;">
+                                    <strong>${threat.source_ip}</strong> - Ports: ${threat.ports_accessed.join(', ')} (Risk: ${threat.risk_score})
                                 </div>
                             `;
                         });
-                    } else {
-                        detailsHtml += '<p>No incidents detected.</p>';
                     }
-                    
-                    detailsHtml += '<h4>Recommendations:</h4><ul>';
-                    data.recommendations.forEach(rec => {
-                        detailsHtml += `<li>${rec}</li>`;
-                    });
-                    detailsHtml += '</ul>';
-                    
-                    detailsDiv.innerHTML = detailsHtml;
-                    reportSection.style.display = 'block';
+
+                    if (data.recommendations.length > 0) {
+                        html += '<h3 style="margin-top: 20px; margin-bottom: 10px; color: #00ff88;">✅ Recommendations</h3>';
+                        html += '<div class="recommendations">';
+                        data.recommendations.forEach(rec => {
+                            html += `<div class="recommendation-item">${rec}</div>`;
+                        });
+                        html += '</div>';
+                    }
+
+                    container.innerHTML = html;
                 })
-                .catch(err => console.log('Report not available yet'));
+                .catch(err => console.log('Report fetch error:', err));
         }
+
+        function refreshAlertsManual() {
+            clearContainer('alerts-container');
+            fetchAlerts();
+            fetchReport();
+        }
+
+        // Initial load
+        fetchAlerts();
     </script>
 </body>
 </html>
